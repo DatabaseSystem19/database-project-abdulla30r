@@ -3,8 +3,6 @@ drop table products;
 drop table books;
 drop table sellers;
 drop table customers;
-drop view allProducts;
-drop view orderList;
 
 create table books(
     id NUMBER PRIMARY KEY,
