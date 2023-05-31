@@ -136,3 +136,60 @@ begin
     end loop;
 end;
 /
+
+--simple procedure for printing customer name according to customer_id (IN)
+
+create or replace procedure proc(var1 in customers.customer_id%type) is
+var2 varchar2(30);
+begin
+select customer_name into var2 from customers where customer_id = var1;
+dbms_output.put_line('customer name:'|| var2);
+end;
+/
+
+set serveroutput on
+declare 
+begin
+proc(5005);
+end;
+/
+
+
+--in out
+
+create or replace procedure proc2(varId in customers.customer_id%type, varName out customers.customer_name%type,varEmail out customers.email%type) is
+begin
+select customer_name,email into varName,varEmail from customers where customer_id = varId;
+end;
+/
+
+set serveroutput on
+declare 
+cName Customers.customer_name%type;
+cEmail CUSTOMERS.EMAIL%type;
+begin
+proc2(5005,CName,CEmail);
+dbms_output.put_line('Name:'||cName || ' Email: '||cEmail);
+end;
+/
+
+--function (take input of a customer id and print his email)
+create or replace function func(varId in Customers.customer_id%type) return varchar as
+cName customers.customer_NAME%type;
+begin
+select customer_NAME into cName from customers where customer_id = varId;
+return cName;
+end;
+/
+
+
+set serveroutput on
+declare 
+cName customers.customer_name%type;
+cEmail customers.Email%type;
+begin
+cName:=func(5001);
+select email into cEmail from customers where customer_name = cName;
+dbms_output.put_line('Email: '||cEmail);
+end;
+/
