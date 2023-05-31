@@ -88,7 +88,8 @@ INSERT INTO orders (order_id, product_id, customer_id, quantity,order_date) VALU
 INSERT INTO orders (order_id, product_id, customer_id, quantity,order_date) VALUES (7007, 3013, 5004, 5,date '2023-04-28');
 INSERT INTO orders (order_id, product_id, customer_id, quantity,order_date) VALUES (7009, 3005, 5005, 2,date '2023-05-10');
 
-
+drop view allProducts;
+drop view orderList;
 
 
 --Show table name
