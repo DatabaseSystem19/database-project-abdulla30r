@@ -193,3 +193,40 @@ select email into cEmail from customers where customer_name = cName;
 dbms_output.put_line('Email: '||cEmail);
 end;
 /
+
+
+--Trigger
+
+-- Creating trigger to update total_price
+CREATE OR REPLACE TRIGGER update_total_price
+BEFORE INSERT OR UPDATE ON orders
+FOR EACH ROW
+BEGIN
+        SELECT price * :NEW.quantity
+        INTO :NEW.total_price
+        FROM products
+        WHERE product_id = :NEW.product_id;
+END;
+/
+
+-- Checking Availabity when placing order
+CREATE OR REPLACE TRIGGER place_order
+BEFORE INSERT ON orders
+FOR EACH ROW
+DECLARE
+    product_quantity NUMBER;
+BEGIN
+    SELECT count
+    INTO product_quantity
+    FROM products
+    WHERE product_id = :NEW.product_id;
+
+    IF product_quantity < :NEW.quantity THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Cannot place order. Stock out.');
+    ELSE
+        UPDATE products
+        SET count = count - :NEW.quantity
+        WHERE product_id = :NEW.product_id;
+    END IF;
+END;
+/
